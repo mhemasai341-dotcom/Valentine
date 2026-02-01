@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Valentine Trap 😈💘 (FIXED)</title>
+  <title>Valentine Trap 😈💘 (ACTUALLY FIXED)</title>
   <style>
     body {
       margin: 0;
@@ -90,7 +90,9 @@
     const taunt = document.getElementById('taunt');
 
     let dodgeCount = 0;
-    const MAX_DODGES = 25; // controls when No disappears
+    const MAX_DODGES = 20;
+
+    let hasMovedOnce = false; // CRITICAL FIX
 
     const taunts = [
       "Almost 😜",
@@ -100,7 +102,14 @@
       "Okay… fine 😌"
     ];
 
+    // Prevent instant trigger when page loads and cursor is already over No
+    document.addEventListener('mousemove', () => {
+      hasMovedOnce = true;
+    }, { once: true });
+
     function dodge() {
+      if (!hasMovedOnce) return; // DO NOTHING until user moves mouse
+
       dodgeCount++;
 
       const padding = 40;
@@ -115,7 +124,6 @@
 
       taunt.textContent = taunts[Math.min(dodgeCount, taunts.length - 1)];
 
-      // ONLY after many dodges
       if (dodgeCount >= MAX_DODGES) {
         noBtn.style.display = 'none';
         yesBtn2.style.display = 'block';
@@ -123,7 +131,6 @@
       }
     }
 
-    // IMPORTANT: dodge only when hovering the No button
     noBtn.addEventListener('mouseenter', dodge);
     noBtn.addEventListener('mousedown', dodge);
 
