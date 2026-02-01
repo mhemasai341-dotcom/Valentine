@@ -38,12 +38,13 @@
       cursor: pointer;
       position: absolute;
       transition: transform 0.08s ease;
+      white-space: nowrap;
     }
 
     #yesBtn {
       background-color: #2ecc71;
       color: white;
-      left: 45%;
+      left: 42%;
       top: 50%;
       z-index: 2;
     }
@@ -72,18 +73,20 @@
     <button id="noBtn">No 😏</button>
   </div>
 
-  <div class="taunt" id="taunt">You can try forever 😈</div>
+  <div class="taunt" id="taunt">Try clicking No 😈</div>
 
   <script>
     const noBtn = document.getElementById('noBtn');
     const taunt = document.getElementById('taunt');
 
+    let dodgeCount = 0;
+
     const taunts = [
       "Almost 😜",
       "Still no 😈",
-      "Never gonna happen 😏",
-      "Keep trying 🏃‍♂️💨",
-      "Fate chose YES 💘"
+      "You’re persistent 😏",
+      "Why fight destiny? 💘",
+      "Okay okay… 👀"
     ];
 
     function dodgeCursor(e) {
@@ -98,10 +101,11 @@
 
       const dx = btnCenterX - mouseX;
       const dy = btnCenterY - mouseY;
-
       const distance = Math.sqrt(dx * dx + dy * dy);
 
       if (distance < 120) {
+        dodgeCount++;
+
         let newX = rect.left + dx * 2;
         let newY = rect.top + dy * 2;
 
@@ -111,7 +115,16 @@
         noBtn.style.left = newX + 'px';
         noBtn.style.top = newY + 'px';
 
-        taunt.textContent = taunts[Math.floor(Math.random() * taunts.length)];
+        taunt.textContent = taunts[Math.min(dodgeCount, taunts.length - 1)];
+
+        // AFTER ENOUGH DODGES → FAKE NO TURNS INTO YES
+        if (dodgeCount > 20) {
+          noBtn.textContent = 'Yes 😳💘';
+          noBtn.style.backgroundColor = '#2ecc71';
+          noBtn.onclick = yesClicked;
+          taunt.textContent = 'You knew it all along 😌💖';
+          document.removeEventListener('mousemove', dodgeCursor);
+        }
       }
     }
 
@@ -119,8 +132,8 @@
 
     function yesClicked() {
       document.body.innerHTML = `
-        <h1 style="font-size:2.6rem;">FINALLY 😌💖</h1>
-        <p style="font-size:1.5rem;">You chose wisely 😏💘</p>
+        <h1 style="font-size:2.6rem;">HAHA 😈💖</h1>
+        <p style="font-size:1.5rem;">Both buttons say YES now 😏💘</p>
       `;
     }
   </script>
