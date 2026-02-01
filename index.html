@@ -44,7 +44,7 @@
     #yesBtn {
       background-color: #2ecc71;
       color: white;
-      left: 42%;
+      left: 45%;
       top: 50%;
       z-index: 2;
     }
@@ -55,6 +55,15 @@
       left: 55%;
       top: 60%;
       z-index: 10;
+    }
+
+    #yesBtn2 {
+      background-color: #2ecc71;
+      color: white;
+      left: 55%;
+      top: 60%;
+      display: none;
+      z-index: 3;
     }
 
     .taunt {
@@ -71,12 +80,14 @@
   <div class="buttons">
     <button id="yesBtn" onclick="yesClicked()">Yes 😍</button>
     <button id="noBtn">No 😏</button>
+    <button id="yesBtn2" onclick="yesClicked()">Yes 😳💘</button>
   </div>
 
   <div class="taunt" id="taunt">Try clicking No 😈</div>
 
   <script>
     const noBtn = document.getElementById('noBtn');
+    const yesBtn2 = document.getElementById('yesBtn2');
     const taunt = document.getElementById('taunt');
 
     let dodgeCount = 0;
@@ -84,9 +95,9 @@
     const taunts = [
       "Almost 😜",
       "Still no 😈",
-      "You’re persistent 😏",
-      "Why fight destiny? 💘",
-      "Okay okay… 👀"
+      "Too slow 😏",
+      "Why resist? 💘",
+      "Okay… fine 😌"
     ];
 
     function dodgeCursor(e) {
@@ -117,12 +128,11 @@
 
         taunt.textContent = taunts[Math.min(dodgeCount, taunts.length - 1)];
 
-        // AFTER ENOUGH DODGES → FAKE NO TURNS INTO YES
-        if (dodgeCount > 20) {
-          noBtn.textContent = 'Yes 😳💘';
-          noBtn.style.backgroundColor = '#2ecc71';
-          noBtn.onclick = yesClicked;
-          taunt.textContent = 'You knew it all along 😌💖';
+        // FINAL TRAP: No disappears → second YES appears
+        if (dodgeCount > 25) {
+          noBtn.style.display = 'none';
+          yesBtn2.style.display = 'block';
+          taunt.textContent = 'No is gone 😈 Only YES remains 💘';
           document.removeEventListener('mousemove', dodgeCursor);
         }
       }
@@ -132,8 +142,8 @@
 
     function yesClicked() {
       document.body.innerHTML = `
-        <h1 style="font-size:2.6rem;">HAHA 😈💖</h1>
-        <p style="font-size:1.5rem;">Both buttons say YES now 😏💘</p>
+        <h1 style="font-size:2.6rem;">CHECKMATE 😈💖</h1>
+        <p style="font-size:1.5rem;">There was never a No 😏💘</p>
       `;
     }
   </script>
