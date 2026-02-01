@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Valentine Trap 😈💘</title>
+  <title>Valentine Trap 😈💘 (FIXED)</title>
   <style>
     body {
       margin: 0;
@@ -37,7 +37,6 @@
       border-radius: 30px;
       cursor: pointer;
       position: absolute;
-      transition: transform 0.08s ease;
       white-space: nowrap;
     }
 
@@ -91,6 +90,7 @@
     const taunt = document.getElementById('taunt');
 
     let dodgeCount = 0;
+    const MAX_DODGES = 25; // controls when No disappears
 
     const taunts = [
       "Almost 😜",
@@ -100,45 +100,32 @@
       "Okay… fine 😌"
     ];
 
-    function dodgeCursor(e) {
+    function dodge() {
+      dodgeCount++;
+
       const padding = 40;
-      const rect = noBtn.getBoundingClientRect();
+      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
 
-      const btnCenterX = rect.left + rect.width / 2;
-      const btnCenterY = rect.top + rect.height / 2;
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
 
-      const dx = btnCenterX - mouseX;
-      const dy = btnCenterY - mouseY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+      taunt.textContent = taunts[Math.min(dodgeCount, taunts.length - 1)];
 
-      if (distance < 120) {
-        dodgeCount++;
-
-        let newX = rect.left + dx * 2;
-        let newY = rect.top + dy * 2;
-
-        newX = Math.max(padding, Math.min(window.innerWidth - rect.width - padding, newX));
-        newY = Math.max(padding, Math.min(window.innerHeight - rect.height - padding, newY));
-
-        noBtn.style.left = newX + 'px';
-        noBtn.style.top = newY + 'px';
-
-        taunt.textContent = taunts[Math.min(dodgeCount, taunts.length - 1)];
-
-        // FINAL TRAP: No disappears → second YES appears
-        if (dodgeCount > 25) {
-          noBtn.style.display = 'none';
-          yesBtn2.style.display = 'block';
-          taunt.textContent = 'No is gone 😈 Only YES remains 💘';
-          document.removeEventListener('mousemove', dodgeCursor);
-        }
+      // ONLY after many dodges
+      if (dodgeCount >= MAX_DODGES) {
+        noBtn.style.display = 'none';
+        yesBtn2.style.display = 'block';
+        taunt.textContent = 'No escaped 😈 Only YES remains 💘';
       }
     }
 
-    document.addEventListener('mousemove', dodgeCursor);
+    // IMPORTANT: dodge only when hovering the No button
+    noBtn.addEventListener('mouseenter', dodge);
+    noBtn.addEventListener('mousedown', dodge);
 
     function yesClicked() {
       document.body.innerHTML = `
