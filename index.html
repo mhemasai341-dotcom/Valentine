@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Valentine Trap 💘</title>
+  <title>Valentine Trap 😈💘</title>
   <style>
     body {
       margin: 0;
@@ -11,8 +11,8 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
-      background: radial-gradient(circle at top, #ff4d6d, #590d22);
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle at top, #ff5f7e, #3a0ca3);
       overflow: hidden;
       color: white;
       user-select: none;
@@ -21,7 +21,7 @@
     h1 {
       text-align: center;
       margin-bottom: 40px;
-      font-size: 2.2rem;
+      font-size: 2.3rem;
     }
 
     .buttons {
@@ -31,18 +31,18 @@
     }
 
     button {
-      padding: 14px 30px;
+      padding: 14px 32px;
       font-size: 20px;
       border: none;
       border-radius: 30px;
       cursor: pointer;
       position: absolute;
-      transition: transform 0.1s ease;
+      transition: transform 0.08s ease;
     }
 
     #yesBtn {
       background-color: #2ecc71;
-      color: #fff;
+      color: white;
       left: 45%;
       top: 50%;
       z-index: 2;
@@ -50,63 +50,77 @@
 
     #noBtn {
       background-color: #ff1e56;
-      color: #fff;
+      color: white;
       left: 55%;
       top: 60%;
-      z-index: 5;
+      z-index: 10;
     }
 
     .taunt {
       position: absolute;
       bottom: 20px;
       font-size: 18px;
-      opacity: 0.85;
+      opacity: 0.9;
     }
   </style>
 </head>
 <body>
-  <h1>Will you be my Valentine? 💘😌</h1>
+  <h1>Can you be my Valentine? 💘😌</h1>
 
   <div class="buttons">
     <button id="yesBtn" onclick="yesClicked()">Yes 😍</button>
     <button id="noBtn">No 😏</button>
   </div>
 
-  <div class="taunt" id="taunt">Go on… try clicking No 😈</div>
+  <div class="taunt" id="taunt">You can try forever 😈</div>
 
   <script>
     const noBtn = document.getElementById('noBtn');
     const taunt = document.getElementById('taunt');
 
     const taunts = [
-      "Too slow 😜",
-      "Nice try 😏",
-      "You sure about that? 😈",
-      "Nope nope nope 🏃‍♂️💨",
-      "Destiny says YES 💘"
+      "Almost 😜",
+      "Still no 😈",
+      "Never gonna happen 😏",
+      "Keep trying 🏃‍♂️💨",
+      "Fate chose YES 💘"
     ];
 
-    function moveButton() {
-      const padding = 20;
-      const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-      const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+    function dodgeCursor(e) {
+      const padding = 40;
+      const rect = noBtn.getBoundingClientRect();
 
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
 
-      noBtn.style.left = x + 'px';
-      noBtn.style.top = y + 'px';
+      const btnCenterX = rect.left + rect.width / 2;
+      const btnCenterY = rect.top + rect.height / 2;
 
-      taunt.textContent = taunts[Math.floor(Math.random() * taunts.length)];
+      const dx = btnCenterX - mouseX;
+      const dy = btnCenterY - mouseY;
+
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 120) {
+        let newX = rect.left + dx * 2;
+        let newY = rect.top + dy * 2;
+
+        newX = Math.max(padding, Math.min(window.innerWidth - rect.width - padding, newX));
+        newY = Math.max(padding, Math.min(window.innerHeight - rect.height - padding, newY));
+
+        noBtn.style.left = newX + 'px';
+        noBtn.style.top = newY + 'px';
+
+        taunt.textContent = taunts[Math.floor(Math.random() * taunts.length)];
+      }
     }
 
-    noBtn.addEventListener('mouseenter', moveButton);
-    noBtn.addEventListener('mousedown', moveButton);
+    document.addEventListener('mousemove', dodgeCursor);
 
     function yesClicked() {
       document.body.innerHTML = `
-        <h1 style="font-size:2.5rem;">YAYYY!! 💖🥳</h1>
-        <p style="font-size:1.4rem;">Guess you had no other choice 😌💘</p>
+        <h1 style="font-size:2.6rem;">FINALLY 😌💖</h1>
+        <p style="font-size:1.5rem;">You chose wisely 😏💘</p>
       `;
     }
   </script>
